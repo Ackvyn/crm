@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Getting started · Ackvyn CRM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../site/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="../site/">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="../site/what-is.html">What is</a>
+        <a href="../site/why.html">Why</a>
+        <a href="../site/worker.html">Worker</a>
+        <a href="./" aria-current="page">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-sidebar" aria-label="Documentation">
+        <p class="docs-sidebar-label">Docs</p>
+        <nav>
+          <a href="./">Overview</a>
+          <a href="getting-started.html" aria-current="page">Getting started</a>
+          <a href="worker-setup.html">Worker setup</a>
+          <a href="free-tier.html">Free tier &amp; usage</a>
+          <a href="auth.html">Auth &amp; OAuth</a>
+          <a href="email-routing.html">Email routing</a>
+          <a href="embeds.html">Embeds</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="documents.html">Documents &amp; e-sign</a>
+          <a href="config.html">Config</a>
+        </nav>
+      </aside>
+      <article class="docs-content doc">
+        <h1>Getting started</h1>
+        <p>
+          You are the <strong>operator</strong>: you deploy a Worker, gate the
+          console with auth, and open it from your operator site. Client
+          websites only load scripts.
+        </p>
+        <ol>
+          <li>
+            <a href="../site/worker.html">Deploy your Worker</a> (see
+            <a href="worker-setup.html">Worker setup</a> for the Deploy to
+            Cloudflare button or <code>wrangler</code>).
+          </li>
+          <li>
+            Set up
+            <a href="auth.html">Auth &amp; GitHub OAuth</a>
+            so agents can sign in.
+          </li>
+          <li>
+            Open the console from your <em>authenticated</em> operator site
+            (iframe or link) and point it at <em>your</em> Worker URL — not as a
+            public CDN bookmark for strangers.
+          </li>
+          <li>
+            Create a <strong>site key</strong> in the hub; allow the client’s
+            origin.
+          </li>
+          <li>
+            Give them an embed with
+            <code>src</code> = this CDN and
+            <code>data-crm</code> = <em>your</em> Worker.
+          </li>
+          <li>
+            Optional:
+            <a href="email-routing.html">Email Routing</a>,
+            <a href="reviews.html">Google reviews</a>, and
+            <a href="analytics.html">Google Analytics</a>
+            in Settings.
+          </li>
+        </ol>
+        <p>
+          Designed for Cloudflare Workers Free budgets — see
+          <a href="free-tier.html">Free tier &amp; Worker usage</a>.
+        </p>
+        <h2>Custom domain for this CDN</h2>
+        <p>
+          Attach a domain to the GitHub Pages site (e.g.
+          <code>crm.ackvyn.org</code>). Script <code>src</code> hosts change;
+          each operator’s <code>data-crm</code> still points at their own Worker.
+        </p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="../site/what-is.html">What is</a>
+      <a href="../site/why.html">Why</a>
+      <a href="../site/worker.html">Worker</a>
+      <a href="./">Docs</a>
+    </footer>
+  </body>
+</html>

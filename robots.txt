@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /console
+Disallow: /console/
+
+Sitemap: https://crm.ackvyn.org/sitemap.xml
+# Marketing pages live under /site/; scripts under /cdn/

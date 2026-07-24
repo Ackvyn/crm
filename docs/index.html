@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Docs · Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="Ackvyn CRM documentation — getting started, Worker setup, auth, embeds, email, reviews, and config."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../site/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="../site/">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="../site/what-is.html">What is</a>
+        <a href="../site/why.html">Why</a>
+        <a href="../site/worker.html">Worker</a>
+        <a href="./" aria-current="page">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-sidebar" aria-label="Documentation">
+        <p class="docs-sidebar-label">Docs</p>
+        <nav>
+          <a href="./" aria-current="page">Overview</a>
+          <a href="getting-started.html">Getting started</a>
+          <a href="worker-setup.html">Worker setup</a>
+          <a href="free-tier.html">Free tier &amp; usage</a>
+          <a href="auth.html">Auth &amp; OAuth</a>
+          <a href="email-routing.html">Email routing</a>
+          <a href="embeds.html">Embeds</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="documents.html">Documents &amp; e-sign</a>
+          <a href="config.html">Config</a>
+        </nav>
+      </aside>
+
+      <article class="docs-content doc">
+        <h1>Documentation</h1>
+        <p>
+          Setup and reference for operators. Product story lives on
+          <a href="../site/what-is.html">What is</a>,
+          <a href="../site/why.html">Why</a>, and
+          <a href="../site/worker.html">Worker</a> — this section is the how-to wiki.
+        </p>
+
+        <h2>Guides</h2>
+        <ul class="doc-index">
+          <li>
+            <a href="getting-started.html"><strong>Getting started</strong></a>
+            — operator checklist
+          </li>
+          <li>
+            <a href="worker-setup.html"><strong>Worker setup</strong></a>
+            — Deploy to Cloudflare, secrets, vars
+          </li>
+          <li>
+            <a href="free-tier.html"><strong>Free tier &amp; usage</strong></a>
+            — client-side first, what hits the Worker, ~100k req/day
+          </li>
+          <li>
+            <a href="auth.html"><strong>Auth &amp; OAuth</strong></a>
+            — GitHub OAuth; open console from your operator site
+          </li>
+          <li>
+            <a href="email-routing.html"><strong>Email routing</strong></a>
+            — Cloudflare Email → Worker
+          </li>
+          <li>
+            <a href="embeds.html"><strong>Embeds</strong></a>
+            — chat + reviews script tags
+          </li>
+          <li>
+            <a href="reviews.html"><strong>Reviews</strong></a>
+            — public JSON + loader
+          </li>
+          <li>
+            <a href="analytics.html"><strong>Analytics</strong></a>
+            — connect GA4 for the console Analytics panel
+          </li>
+          <li>
+            <a href="documents.html"><strong>Documents &amp; e-sign</strong></a>
+            — library, folders, PDF fields, share links, Save to Documents
+          </li>
+          <li>
+            <a href="config.html"><strong>Config</strong></a>
+            — attributes &amp; git layout
+          </li>
+        </ul>
+
+        <h2>Split of responsibilities</h2>
+        <ul>
+          <li>
+            <strong>This CDN</strong> — GUI only: embeds, docs, and console
+            assets (agents open the console from their authenticated operator
+            site — see <a href="auth.html">Auth</a>)
+          </li>
+          <li>
+            <strong>Your Cloudflare Worker</strong> — API only: Durable Objects,
+            WebSockets, intake, email, git sync —
+            <a href="../site/worker.html">product overview</a>
+          </li>
+        </ul>
+        <p>
+          Do not point client sites at someone else’s Worker. Deploy your own,
+          then set <code>data-crm</code> to that URL.
+        </p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="../site/what-is.html">What is</a>
+      <a href="../site/why.html">Why</a>
+      <a href="../site/worker.html">Worker</a>
+      <a href="./">Docs</a>
+    </footer>
+  </body>
+</html>

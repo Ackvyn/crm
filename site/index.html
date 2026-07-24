@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="Open git-based CRM and live chat for static sites: CDN-hosted console and embeds, your Cloudflare Worker for the API."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="./">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="what-is.html">What is</a>
+        <a href="why.html">Why</a>
+        <a href="worker.html">Worker</a>
+        <a href="../docs/">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1 class="brand-hero">Ackvyn <span>CRM</span></h1>
+        <p class="hero-line">Git-based CRM for static sites, made portable.</p>
+        <p class="lede">
+          Live chat, tickets, and contacts for the free Pages + git CMS world.
+          Console and embeds from this CDN; API on a Worker you deploy — same
+          idea as a CDN-served CMS, for customer conversations.
+        </p>
+        <p class="actions">
+          <a class="btn primary" href="what-is.html">What is Ackvyn CRM?</a>
+          <a class="btn" href="worker.html">Deploy your Worker</a>
+          <a class="btn ghost" href="why.html">Why it exists</a>
+        </p>
+        <!-- OLD CODE - KEEP UNTIL CONFIRMED WORKING: .deploy-row with Deploy to Cloudflare button removed from homepage; button remains on worker.html / docs/worker-setup.html -->
+      </section>
+
+      <section class="pillars" aria-label="Highlights">
+        <div>
+          <h2>CDN GUI</h2>
+          <p>
+            Console, chat widget, and docs — always current, no SPA copy on every
+            client site.
+          </p>
+        </div>
+        <div>
+          <h2>Your Worker</h2>
+          <!-- OLD CODE - KEEP UNTIL CONFIRMED WORKING
+          <p>
+            Sockets, intake, email, and git sync on your Cloudflare account —
+            not a shared black box.
+          </p>
+          -->
+          <!-- NEW CODE - TESTING -->
+          <p>
+            Chat, email, and visitor intake on your Cloudflare Free Worker —
+            console CRUD stays on GitHub where it can, like Sveltia.
+          </p>
+          <!-- END NEW CODE -->
+        </div>
+        <div>
+          <h2>Git records</h2>
+          <p>
+            Encrypted contacts, tickets, and Documents in
+            <code>crm-data/</code>; public reviews JSON you can ship with the
+            site.
+          </p>
+        </div>
+        <div>
+          <h2>Drop-in embeds</h2>
+          <p>
+            One script: <code>src</code> from this CDN,
+            <code>data-crm</code> to your Worker.
+          </p>
+        </div>
+      </section>
+
+      <section class="console-demo" aria-label="Console demo">
+        <div class="console-demo-intro">
+          <h2>The real console</h2>
+          <p>
+            Same Messenger, Tickets, and Contacts panels as the live console —
+            driven by a short scripted scenario. Use the timeline under the
+            console to skip ahead. View-only; no Worker or sign-in.
+          </p>
+        </div>
+        <div class="console-demo-stage">
+          <div id="crm-demo-root" class="console-demo-host"></div>
+        </div>
+      </section>
+      <script src="../cdn/ackvyn-crm-showcase.js" defer></script>
+
+      <section class="split" aria-label="How it splits">
+        <div>
+          <h2>This CDN</h2>
+          <p>
+            <code>embed.js</code>, product pages, docs, and the console GUI
+            assets. Agents open the console from their operator site (iframe or
+            link after sign-in) — not as a public marketing link.
+          </p>
+        </div>
+        <div>
+          <h2>Your Worker</h2>
+          <!-- OLD CODE - KEEP UNTIL CONFIRMED WORKING
+          <p>
+            Durable Objects, WebSockets, form intake, Email Routing, encrypted
+            commits — on your account.
+          </p>
+          -->
+          <!-- NEW CODE - TESTING -->
+          <p>
+            Durable Objects, WebSockets, form intake, Email Routing — on your
+            account. Agent ticket/contact edits prefer GitHub from the browser
+            (<a href="../docs/free-tier.html">usage notes</a>).
+          </p>
+          <!-- END NEW CODE -->
+        </div>
+        <div>
+          <h2>Client sites</h2>
+          <p>
+            Marketing sites load the widget from here and talk only to
+            <em>your</em> Worker.
+          </p>
+        </div>
+      </section>
+
+      <section class="snippet-block">
+        <h2>Embed on a marketing site</h2>
+        <pre><code>&lt;script
+  src="https://crm.ackvyn.org/cdn/embed.js"
+  data-site="your-site-key"
+  data-crm="https://YOUR-SUBDOMAIN.workers.dev"
+  data-mode="float"
+  async
+&gt;&lt;/script&gt;</code></pre>
+        <p class="muted">
+          Never point <code>data-crm</code> at someone else’s Worker. Each
+          operator deploys their own.
+        </p>
+      </section>
+
+      <section class="home-links">
+        <h2>Learn more</h2>
+        <ul>
+          <li>
+            <a href="what-is.html">What is Ackvyn CRM?</a> — product definition
+            and highlights
+          </li>
+          <li>
+            <a href="why.html">Why</a> — static workflows, Sveltia-shaped
+            thinking, free Cloudflare budgets, and how this sits next to Tawk
+          </li>
+          <li>
+            <a href="worker.html">Worker</a> — deploy your API Worker
+          </li>
+          <li>
+            <a href="../docs/">Docs</a> — setup guides (Worker, free tier, auth,
+            email, embeds, reviews, config)
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="what-is.html">What is</a>
+      <a href="why.html">Why</a>
+      <a href="worker.html">Worker</a>
+      <a href="../docs/">Docs</a>
+    </footer>
+  </body>
+</html>

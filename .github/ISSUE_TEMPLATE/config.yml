@@ -1,0 +1,9 @@
+# https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://crm.ackvyn.org/docs/
+    about: Getting started, Worker setup, Documents, auth, embeds, and more
+  - name: Got a question?
+    url: https://github.com/Ackvyn/crm/discussions
+    about: Ask for help in Discussions (preferred for setup Q&A)

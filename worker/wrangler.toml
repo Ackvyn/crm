@@ -1,0 +1,63 @@
+# Ackvyn CRM — portable Worker template (API only).
+# This folder is the Deploy-to-Cloudflare project root for:
+#   https://deploy.workers.cloudflare.com/?url=https://github.com/Ackvyn/crm/tree/main/worker
+#
+# Cloudflare clones *this directory* into the operator’s GitHub account and reads
+# THIS wrangler.toml (not the monorepo root). Keep it self-contained.
+#
+# Canonical API source for maintainers: ../src/ — then run:
+#   ./scripts/sync-worker-template.sh
+#
+# Do NOT put account_id, API tokens, or secrets in this file.
+# Account is chosen at deploy time (dashboard / CLOUDFLARE_ACCOUNT_ID).
+
+name = "ackvyn-crm"
+main = "./src/index.js"
+compatibility_date = "2024-11-01"
+workers_dev = true
+
+# Optional: serve embed.js from the Worker hostname.
+# Chat GUI still loads from https://crm.ackvyn.org — set data-crm to THIS Worker.
+[assets]
+directory = "./static"
+binding = "ASSETS"
+run_worker_first = true
+
+[[durable_objects.bindings]]
+name = "CRM"
+class_name = "CrmSite"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["CrmSite"]
+
+# NEW CODE - TESTING: Cloudflare Email Sending (Workers paid). Binding is always
+# present so the Worker can send when the site toggle is on; free accounts keep
+# mailto + CC. Enable Email Sending in the Cloudflare dashboard for the account.
+[[send_email]]
+name = "EMAIL"
+
+[vars]
+# Your operator site + client site origins (CORS). Comma-separated.
+ALLOWED_SITE_ORIGINS = "https://example.com,http://localhost:5173"
+ARCHIVE_AFTER_DAYS = "90"
+# Encrypted contacts/tickets/branding live in this git repo under CRM_GIT_PATH_PREFIX
+CRM_GIT_REPO = "YOUR_ORG/YOUR_REPO"
+CRM_GIT_BRANCH = "main"
+CRM_GIT_PATH_PREFIX = "crm-data"
+# Default site key for inbound email when no alias map matches
+CRM_INBOUND_EMAIL_SITE = "your-site-key"
+# Auth Worker that verifies CRM console sessions (GitHub OAuth)
+AUTH_WORKER_URL = "https://your-auth.workers.dev"
+# CRM_EMAIL_ALIASES = "info@crm.example.com:your-site-key"
+# CRM_EMAIL_FORWARD_TO = ""
+
+# Secrets — leave blank on Deploy; set after with your own values:
+#   npx wrangler secret put GITHUB_TOKEN
+#   npx wrangler secret put CRM_DATA_PASSPHRASE
+# Passphrase = long random string (https://crm.ackvyn.org/worker.html#passphrase)
+# See .dev.vars.example (empty values on purpose).
+
+[triggers]
+# Reviews sync + maintenance
+crons = ["0 6,18 * * *"]

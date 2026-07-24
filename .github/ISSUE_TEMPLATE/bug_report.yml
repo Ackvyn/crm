@@ -1,0 +1,56 @@
+name: Bug report
+description: Something is broken in the CDN console, Worker, embeds, or docs
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. **Do not** include tokens, passphrases, or private repo contents.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Console (CRM UI)
+        - Worker / API
+        - Chat embed
+        - Reviews embed
+        - Documents / e-sign
+        - Email / tickets intake
+        - Docs / wiki
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Expected vs actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, Worker/CDN versions if known
+      placeholder: e.g. Chrome 128 · macOS · crm.ackvyn.org console.js
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Extra context
+      description: Screenshots, console errors (redact secrets), related issues
+    validations:
+      required: false

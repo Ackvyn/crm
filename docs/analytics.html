@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Google Analytics · Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="Connect GA4 to Ackvyn CRM — Property ID, service account, Analytics Data API."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../site/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="../site/">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="../site/what-is.html">What is</a>
+        <a href="../site/why.html">Why</a>
+        <a href="../site/worker.html">Worker</a>
+        <a href="./" aria-current="page">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-sidebar" aria-label="Documentation">
+        <p class="docs-sidebar-label">Docs</p>
+        <nav>
+          <a href="./">Overview</a>
+          <a href="getting-started.html">Getting started</a>
+          <a href="worker-setup.html">Worker setup</a>
+          <a href="free-tier.html">Free tier &amp; usage</a>
+          <a href="auth.html">Auth &amp; OAuth</a>
+          <a href="email-routing.html">Email routing</a>
+          <a href="embeds.html">Embeds</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="analytics.html" aria-current="page">Analytics</a>
+          <a href="documents.html">Documents &amp; e-sign</a>
+          <a href="config.html">Config</a>
+        </nav>
+      </aside>
+      <article class="docs-content doc">
+        <h1>Google Analytics</h1>
+        <p>
+          Ackvyn CRM’s <strong>Analytics</strong> panel reads
+          <em>your</em> GA4 property through the Google Analytics Data API. The
+          Worker stores a service-account key (encrypted) and proxies reports for
+          signed-in agents. CRM does not replace the GA tag on the website —
+          collection still happens in GA4 as usual.
+        </p>
+
+        <h2>What you need</h2>
+        <ul>
+          <li>
+            A <strong>GA4 property</strong> already receiving hits from the
+            client site (gtag / GTM / equivalent).
+          </li>
+          <li>
+            The numeric <strong>Property ID</strong> (Admin → Property
+            settings) — <em>not</em> the <code>G-…</code> Measurement ID.
+          </li>
+          <li>
+            A Google Cloud <strong>service account</strong> JSON key with access
+            to that property (Viewer is enough).
+          </li>
+          <li>
+            Worker secret <code>CRM_DATA_PASSPHRASE</code> set (same secret used
+            for encrypted CRM data) so the key can be stored at rest.
+          </li>
+        </ul>
+
+        <h2>1. Collect traffic in GA4</h2>
+        <p>
+          Install GA4 on the public site first. Until the property has data,
+          the CRM Analytics panel will be empty even if the connection succeeds.
+        </p>
+
+        <h2>2. Enable the Analytics Data API</h2>
+        <ol>
+          <li>Open <a href="https://console.cloud.google.com/">Google Cloud Console</a>.</li>
+          <li>Select (or create) a project.</li>
+          <li>
+            Enable
+            <strong>Google Analytics Data API</strong>
+            (API Library → search “Analytics Data API”).
+          </li>
+        </ol>
+
+        <h2>3. Create a service account</h2>
+        <ol>
+          <li>IAM &amp; Admin → Service Accounts → Create.</li>
+          <li>Create a JSON key and download it (keep it private).</li>
+          <li>
+            Note the <code>client_email</code> in that file (looks like
+            <code>…@….iam.gserviceaccount.com</code>).
+          </li>
+        </ol>
+
+        <h2>4. Grant the service account access in GA4</h2>
+        <ol>
+          <li>Open GA4 → <strong>Admin</strong> → Property access management.</li>
+          <li>
+            Add the service account email with role
+            <strong>Viewer</strong> (or higher).
+          </li>
+        </ol>
+        <p class="muted">
+          Without this step the Worker authenticates to Google but reports fail
+          with a permission error.
+        </p>
+
+        <h2>5. Find the Property ID</h2>
+        <p>
+          GA4 Admin → Property settings → <strong>Property ID</strong> (digits
+          only, e.g. <code>123456789</code>). Do not paste the Measurement ID
+          (<code>G-XXXX</code>).
+        </p>
+
+        <h2>6. Connect in the CRM console</h2>
+        <ol>
+          <li>Sign in to your operator console (see <a href="auth.html">Auth</a>).</li>
+          <li>Open <strong>Settings → Analytics</strong>.</li>
+          <li>Paste the Property ID and the full service-account JSON.</li>
+          <li>Save. Status should show Connected plus the client email.</li>
+        </ol>
+        <p>
+          The JSON key is stored encrypted in your site’s Durable Object. It is
+          never shown back in the browser after save — leave the JSON field blank
+          when you only need to change the Property ID.
+        </p>
+
+        <h2>7. View reports</h2>
+        <p>
+          Open the console <strong>Analytics</strong> section. Choose 7d / 28d /
+          90d. Typical totals: sessions, users, page views, plus countries and
+          top pages from the Data API.
+        </p>
+
+        <h2>API (your Worker)</h2>
+        <p>Session-gated (agent Bearer token required):</p>
+        <pre><code>GET  /v1/{site}/analytics/ga/config
+PUT  /v1/{site}/analytics/ga/config
+DELETE /v1/{site}/analytics/ga/config
+GET  /v1/{site}/analytics/ga/report?range=7d|28d|90d</code></pre>
+
+        <h2>Troubleshooting</h2>
+        <ul>
+          <li>
+            <strong>Invalid property id</strong> — you used <code>G-…</code>
+            instead of the numeric Property ID.
+          </li>
+          <li>
+            <strong>Permission / 403 from Google</strong> — service account
+            email missing from GA4 Property access, or Analytics Data API not
+            enabled on the Cloud project that owns the key.
+          </li>
+          <li>
+            <strong>Empty charts</strong> — property has no data yet, wrong
+            property, or date range with no traffic.
+          </li>
+          <li>
+            <strong>Save fails</strong> — confirm
+            <code>CRM_DATA_PASSPHRASE</code> is set on the Worker and you are
+            signed in with a valid CRM session.
+          </li>
+        </ul>
+        <p class="muted">
+          Live chat “On site” presence is separate: that comes from the CRM
+          embed + Worker Durable Object, not from Google Analytics.
+        </p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="../site/what-is.html">What is</a>
+      <a href="../site/why.html">Why</a>
+      <a href="../site/worker.html">Worker</a>
+      <a href="./">Docs</a>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Documents &amp; e-sign · Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="Ackvyn CRM Documents library, folders, PDF field placement, and share-link e-sign."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../site/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="../site/">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="../site/what-is.html">What is</a>
+        <a href="../site/why.html">Why</a>
+        <a href="../site/worker.html">Worker</a>
+        <a href="./" aria-current="page">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-sidebar" aria-label="Documentation">
+        <p class="docs-sidebar-label">Docs</p>
+        <nav>
+          <a href="./">Overview</a>
+          <a href="getting-started.html">Getting started</a>
+          <a href="worker-setup.html">Worker setup</a>
+          <a href="free-tier.html">Free tier &amp; usage</a>
+          <a href="auth.html">Auth &amp; OAuth</a>
+          <a href="email-routing.html">Email routing</a>
+          <a href="embeds.html">Embeds</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="documents.html" aria-current="page">Documents &amp; e-sign</a>
+          <a href="config.html">Config</a>
+        </nav>
+      </aside>
+      <article class="docs-content doc">
+        <h1>Documents &amp; e-sign</h1>
+        <p>
+          The console <strong>Documents</strong> section is an encrypted
+          workspace library in git — separate from ticket-only attachments.
+          Use it for templates, field layouts, and retained signed copies.
+        </p>
+
+        <h2>Library &amp; folders</h2>
+        <ul>
+          <li>Upload PDFs (and other files) into the site’s Documents store.</li>
+          <li>Create folders / subfolders; drag files between folders.</li>
+          <li>
+            Move, copy, duplicate, rename, and delete via the file menu.
+          </li>
+        </ul>
+        <p>Stored under your data repo as:</p>
+        <pre><code>crm-data/{site}/documents/
+  manifest.json.enc
+  {document-id}.enc</code></pre>
+
+        <h2>PDF fields &amp; share links</h2>
+        <ul>
+          <li>
+            <strong>Place fields</strong> — layout signature / text / date
+            fields on a PDF (source stays editable).
+          </li>
+          <li>
+            <strong>Create share link</strong> — Worker e-sign session for a
+            contact + ticket; signer opens the link, completes required fields.
+          </li>
+          <li>
+            When signing finishes, the signed PDF attaches to the
+            <em>ticket</em> (with audit note / hashes) — not automatically into
+            Documents.
+          </li>
+        </ul>
+        <p>
+          Everyday paperwork with an audit trail — not a
+          government-certified / qualified electronic signature. Use a
+          DocuSign-class vendor when a counterparty requires it, then attach
+          the finished PDF to the ticket.
+        </p>
+
+        <h2>Tickets ↔ Documents</h2>
+        <ul>
+          <li>
+            Ticket files stay on the ticket until you choose
+            <strong>⋮ → Save to Documents</strong> (name + folder). Signed
+            copies can retain contact + e-sign audit on the library record.
+          </li>
+          <li>
+            Contact detail shows a <strong>Signed documents</strong> list
+            (deduped across ticket + library). Open ticket and/or Open in
+            Documents when each still exists.
+          </li>
+          <li>
+            Deleting a ticket that still has a signed PDF
+            <em>not</em> saved to Documents prompts an extra warning first.
+          </li>
+        </ul>
+
+        <h2>Worker vs browser</h2>
+        <p>
+          Library CRUD is browser → GitHub (like contacts/tickets). Creating
+          and completing e-sign sessions goes through your CRM Worker
+          (<code>/sign/sessions</code>).
+        </p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="../site/what-is.html">What is</a>
+      <a href="../site/why.html">Why</a>
+      <a href="../site/worker.html">Worker</a>
+      <a href="./">Docs</a>
+    </footer>
+  </body>
+</html>

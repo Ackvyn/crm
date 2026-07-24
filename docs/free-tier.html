@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Free tier &amp; Worker usage · Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="How Ackvyn CRM stays client-side-first on Cloudflare Workers Free (including the 100k requests/day allowance) — what hits the Worker and what does not."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../site/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="../site/">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="../site/what-is.html">What is</a>
+        <a href="../site/why.html">Why</a>
+        <a href="../site/worker.html">Worker</a>
+        <a href="./" aria-current="page">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-sidebar" aria-label="Documentation">
+        <p class="docs-sidebar-label">Docs</p>
+        <nav>
+          <a href="./">Overview</a>
+          <a href="getting-started.html">Getting started</a>
+          <a href="worker-setup.html">Worker setup</a>
+          <a href="free-tier.html" aria-current="page">Free tier &amp; usage</a>
+          <a href="auth.html">Auth &amp; OAuth</a>
+          <a href="email-routing.html">Email routing</a>
+          <a href="embeds.html">Embeds</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="documents.html">Documents &amp; e-sign</a>
+          <a href="config.html">Config</a>
+        </nav>
+      </aside>
+      <article class="docs-content doc">
+        <h1>Free tier &amp; Worker usage</h1>
+        <p>
+          Ackvyn CRM is aimed at operators who already have a Cloudflare account
+          for their domain and want to run on
+          <a
+            href="https://developers.cloudflare.com/workers/platform/limits/"
+            >Workers Free</a
+          >
+          — including the usual
+          <strong>100,000 requests per day</strong> per Worker (confirm the
+          current number in Cloudflare’s docs; the quota resets daily). Product
+          story:
+          <a href="../site/why.html">Why → Built for a free Cloudflare account</a>.
+        </p>
+
+        <h2>Same idea as Sveltia CMS</h2>
+        <p>
+          With
+          <a href="https://sveltiacms.app/en/">Sveltia CMS</a>, day-to-day
+          editing is mostly browser → GitHub. You typically deploy a small
+          <strong>auth Worker</strong> so agents can sign in; after that, the CMS
+          script commits content to the repo itself. The Worker is not in the
+          path for every save.
+        </p>
+        <p>
+          Ackvyn CRM follows that pattern where it can:
+        </p>
+        <ul>
+          <li>
+            Console GUI from the CDN (Sveltia-style
+            <code>console.js</code> on your operator site).
+          </li>
+          <li>
+            Auth via your auth Worker (see <a href="auth.html">Auth</a>).
+          </li>
+          <li>
+            Signed-in agents create / update / delete tickets, contacts, and
+            Documents by committing encrypted files to GitHub from the browser —
+            those edits do <strong>not</strong> need a CRM Worker request for
+            each change.
+          </li>
+        </ul>
+
+        <h2>What must hit the CRM Worker</h2>
+        <p>
+          Some features cannot be pure client-side. They go through your CRM
+          Worker (and Durable Objects where chat needs them):
+        </p>
+        <ul>
+          <li>
+            <strong>Live chat &amp; presence</strong> — WebSockets, visitor
+            sessions, agent online state.
+          </li>
+          <li>
+            <strong>Inbound email</strong> — Cloudflare Email Routing delivers
+            to the Worker (<a href="email-routing.html">Email routing</a>).
+            Outbound on free accounts is mailto + CC/BCC the CRM address. Optional
+            Worker send (Settings toggle, off by default) needs Cloudflare Email
+            Sending on a paid Workers plan.
+          </li>
+          <li>
+            <strong>Anonymous / form intake</strong> — visitors posting without
+            an agent GitHub session.
+          </li>
+          <li>
+            <strong>E-sign share sessions</strong> — create / complete document
+            signing links (<a href="documents.html">Documents &amp; e-sign</a>).
+          </li>
+          <li>
+            <strong>Anything that cannot safely hold your git token</strong> in
+            the visitor’s browser — the Worker writes encrypted blobs when the
+            visitor path creates records.
+          </li>
+        </ul>
+        <p>
+          The design goal is to keep that surface as small as possible so Free
+          plan request budgets go to chat and email — not to every ticket field
+          edit in the console.
+        </p>
+
+        <h2>What stays off the Worker when it can</h2>
+        <ul>
+          <li>
+            Loading the console, docs, and embeds from the CDN (not your
+            Worker).
+          </li>
+          <li>
+            Agent edits to tickets, contacts, and other git-backed CRM files via
+            GitHub’s Contents API after OAuth.
+          </li>
+          <li>
+            Reading those same encrypted files in the console from GitHub when
+            the agent is signed in.
+          </li>
+        </ul>
+
+        <h2>Mileage may vary</h2>
+        <p>
+          Staying under 100k requests/day is realistic for many small sites, but
+          it is not a guarantee:
+        </p>
+        <ul>
+          <li>
+            Other Workers on the same account (CMS auth, redirects, edge
+            logic, etc.) use their own Free allowances — still worth counting
+            total ops load.
+          </li>
+          <li>
+            Busy chat days, many concurrent visitors, or heavy email volume
+            increase CRM Worker invocations.
+          </li>
+          <li>
+            Cloudflare also limits CPU time and other Free-plan features
+            (including Durable Objects). Check
+            <a
+              href="https://developers.cloudflare.com/workers/platform/limits/"
+              >Workers limits</a
+            >
+            and Durable Objects pricing/limits for the plan you are on.
+          </li>
+        </ul>
+        <aside class="callout">
+          <p>
+            If the Free plan is no longer enough, Cloudflare’s Paid Workers plan
+            removes the daily request ceiling. Ackvyn CRM does not require a
+            multi-tenant SaaS upgrade path — you scale the same Worker you
+            already deploy.
+          </p>
+        </aside>
+
+        <p class="actions doc-actions">
+          <a class="btn primary" href="worker-setup.html">Worker setup</a>
+          <a class="btn" href="../site/why.html">Why</a>
+          <a class="btn ghost" href="./">All docs</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="../site/what-is.html">What is</a>
+      <a href="../site/why.html">Why</a>
+      <a href="../site/worker.html">Worker</a>
+      <a href="./">Docs</a>
+    </footer>
+  </body>
+</html>

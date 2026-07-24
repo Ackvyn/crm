@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reviews · Ackvyn CRM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../site/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="../site/">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="../site/what-is.html">What is</a>
+        <a href="../site/why.html">Why</a>
+        <a href="../site/worker.html">Worker</a>
+        <a href="./" aria-current="page">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-sidebar" aria-label="Documentation">
+        <p class="docs-sidebar-label">Docs</p>
+        <nav>
+          <a href="./">Overview</a>
+          <a href="getting-started.html">Getting started</a>
+          <a href="worker-setup.html">Worker setup</a>
+          <a href="free-tier.html">Free tier &amp; usage</a>
+          <a href="auth.html">Auth &amp; OAuth</a>
+          <a href="email-routing.html">Email routing</a>
+          <a href="embeds.html">Embeds</a>
+          <a href="reviews.html" aria-current="page">Reviews</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="documents.html">Documents &amp; e-sign</a>
+          <a href="config.html">Config</a>
+        </nav>
+      </aside>
+      <article class="docs-content doc">
+        <h1>Google reviews</h1>
+        <p>
+          Configure Place ID in <em>your</em> CRM console. Your Worker syncs to
+          public JSON under your git store:
+        </p>
+        <pre><code>crm-data/{site}/reviews.json</code></pre>
+        <p>Or read the Worker cache:</p>
+        <pre><code>GET https://YOUR-WORKER.workers.dev/v1/{site}/reviews</code></pre>
+        <h2>Loader (CDN script → your Worker)</h2>
+        <pre><code>&lt;script
+  src="https://crm.ackvyn.org/cdn/reviews-embed.js"
+  data-site="your-site-key"
+  data-crm="https://YOUR-WORKER.workers.dev"
+  async
+&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.addEventListener('ackvyn-reviews', (e) =&gt; {
+    // build your own UI from e.detail
+  })
+&lt;/script&gt;</code></pre>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="../site/what-is.html">What is</a>
+      <a href="../site/why.html">Why</a>
+      <a href="../site/worker.html">Worker</a>
+      <a href="./">Docs</a>
+    </footer>
+  </body>
+</html>

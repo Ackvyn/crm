@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Worker · Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="Deploy your own Cloudflare Worker for Ackvyn CRM — API, chat sockets, email, and git sync. Console stays on the CDN."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="./">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="what-is.html">What is</a>
+        <a href="why.html">Why</a>
+        <a href="worker.html" aria-current="page">Worker</a>
+        <a href="../docs/">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="marketing">
+      <header class="page-hero">
+        <p class="eyebrow">API</p>
+        <h1>Your Worker</h1>
+        <p class="lede">
+          The GUI lives on this CDN. The API — chat, tickets, email, git sync —
+          runs on a Cloudflare Worker you deploy to your own account.
+        </p>
+      </header>
+
+      <div class="prose">
+        <p>
+          Same idea as a CDN-served CMS: operators don’t share a multi-tenant
+          backend. Each shop gets a Worker URL, points embeds at it with
+          <code>data-crm</code>, and keeps <code>crm-data/</code> in their own
+          git repo. The Deploy button clones
+          <a href="https://github.com/Ackvyn/crm/tree/main/worker"
+            ><code>worker/</code> from Ackvyn/crm</a
+          >
+          (that folder’s <code>wrangler.toml</code>), not the monorepo root.
+        </p>
+
+        <h2>What the Worker does</h2>
+        <!-- OLD CODE - KEEP UNTIL CONFIRMED WORKING
+        <ul>
+          <li>Live chat &amp; presence (Durable Objects + WebSockets)</li>
+          <li>Ticket intake, macros, contacts</li>
+          <li>Inbound email via Cloudflare Email Routing</li>
+          <li>Encrypted commits to your git store; public reviews JSON</li>
+        </ul>
+        -->
+        <!-- NEW CODE - TESTING: clarify Worker vs client-side git -->
+        <ul>
+          <li>Live chat &amp; presence (Durable Objects + WebSockets)</li>
+          <li>Form / visitor intake when there is no agent GitHub session</li>
+          <li>Inbound email via Cloudflare Email Routing</li>
+          <li>
+            Worker-side encrypted git writes for those paths; public reviews
+            JSON sync
+          </li>
+        </ul>
+        <p>
+          Signed-in agents edit tickets and contacts from the console by
+          committing to GitHub themselves (Sveltia-style) — that path is meant
+          to stay off the Worker. See
+          <a href="../docs/free-tier.html">Free tier &amp; Worker usage</a>.
+        </p>
+        <!-- END NEW CODE -->
+        <p>
+          It does <strong>not</strong> host the admin console. Agents open the
+          console from your own operator site (iframe or link) after GitHub
+          sign-in — not from a public “Console” button on this marketing site.
+        </p>
+
+        <aside class="callout">
+          <p>
+            Aimed at Cloudflare Free: keep chat and email on the Worker, keep
+            console CRUD on GitHub where possible, and stay mindful of the
+            ~100k requests/day Workers Free allowance. Details in
+            <a href="../docs/free-tier.html">Free tier &amp; usage</a> and
+            <a href="why.html">Why</a>.
+          </p>
+        </aside>
+
+        <h2>Deploy</h2>
+        <p>
+          <a
+            href="https://deploy.workers.cloudflare.com/?url=https://github.com/Ackvyn/crm/tree/main/worker"
+            ><img
+              src="https://deploy.workers.cloudflare.com/button"
+              alt="Deploy to Cloudflare"
+              width="160"
+              height="32"
+          /></a>
+        </p>
+        <p class="muted">
+          Or use Wrangler from the
+          <a href="../docs/worker-setup.html">Worker setup</a> guide.
+        </p>
+        <p>
+          Secrets stay <strong>empty</strong> in the template on purpose — the
+          Deploy UI must not look like it ships a shared GitHub token or
+          passphrase. You paste your own after deploy.
+        </p>
+
+        <h2 id="passphrase">Secrets after deploy</h2>
+        <ul>
+          <li>
+            <code>GITHUB_TOKEN</code> — your personal access token with
+            Contents access to the repo in <code>CRM_GIT_REPO</code>. Create it
+            yourself; nothing is pre-filled.
+          </li>
+          <li>
+            <code>CRM_DATA_PASSPHRASE</code> — encrypts
+            <code>crm-data/</code>. Treat it like a high-entropy secret (long
+            random string), not a short memorable password. Use the same value
+            as the Worker secret and in the CRM console. Cloudflare cannot
+            invent a unique one per Deploy click — generate yours below (or
+            <code>openssl rand -base64 32</code>).
+          </li>
+        </ul>
+
+        <div
+          class="passphrase-gen"
+          data-passphrase-gen
+          aria-labelledby="passphrase-gen-title"
+        >
+          <h3 id="passphrase-gen-title" class="passphrase-gen-title">
+            Generate a data passphrase
+          </h3>
+          <p>
+            Runs only in your browser (32 random bytes → base64). Copy it into
+            <code>npx wrangler secret put CRM_DATA_PASSPHRASE</code> and the CRM
+            console encryption setting — store it somewhere safe; lost passphrase
+            means you cannot decrypt existing blobs.
+          </p>
+          <div class="passphrase-gen-row">
+            <input
+              type="text"
+              readonly
+              data-passphrase-out
+              aria-label="Generated passphrase"
+              placeholder="Click Generate"
+            />
+            <button type="button" class="btn primary" data-passphrase-generate>
+              Generate
+            </button>
+            <button type="button" class="btn" data-passphrase-copy>Copy</button>
+          </div>
+          <p class="passphrase-gen-status" data-passphrase-status></p>
+        </div>
+
+        <h2>Next steps</h2>
+        <ul>
+          <li>
+            <a href="../docs/worker-setup.html">Worker setup</a> — vars, secrets,
+            checklist after deploy
+          </li>
+          <li>
+            <a href="../docs/free-tier.html">Free tier &amp; usage</a> — what stays
+            client-side vs what burns Worker requests
+          </li>
+          <li>
+            <a href="../docs/auth.html">Auth &amp; GitHub OAuth</a> — gate the
+            console with the same style of auth Worker you use for CMS
+          </li>
+          <li>
+            <a href="../docs/embeds.html">Embeds</a> — point client sites at
+            <em>your</em> Worker URL
+          </li>
+        </ul>
+
+        <p class="actions doc-actions">
+          <a class="btn primary" href="../docs/worker-setup.html">Full setup guide</a>
+          <a class="btn" href="../docs/auth.html">Auth docs</a>
+          <a class="btn ghost" href="../docs/">All docs</a>
+        </p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="what-is.html">What is</a>
+      <a href="why.html">Why</a>
+      <a href="worker.html">Worker</a>
+      <a href="../docs/">Docs</a>
+    </footer>
+    <script src="../scripts/passphrase-gen.js" defer></script>
+  </body>
+</html>

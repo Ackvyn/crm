@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What is Ackvyn CRM?</title>
+    <meta
+      name="description"
+      content="Ackvyn CRM is an open, git-based CRM and live chat stack for static sites: CDN-hosted GUI, your own Cloudflare Worker for the API."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="./">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="what-is.html" aria-current="page">What is</a>
+        <a href="why.html">Why</a>
+        <a href="worker.html">Worker</a>
+        <a href="../docs/">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="marketing">
+      <header class="page-hero">
+        <p class="eyebrow">Product</p>
+        <h1>What is Ackvyn CRM?</h1>
+        <p class="lede">
+          An open, portable customer relationship stack for sites that already
+          live in the free / static / git world.
+        </p>
+      </header>
+
+      <div class="prose">
+        <p>
+          <strong>Ackvyn CRM</strong> covers live chat, tickets, contacts,
+          Documents (folders + PDF e-sign share links), macros, presence,
+          inbound email, and Google reviews — without renting a separate SaaS
+          CRM for every client site.
+        </p>
+        <p>
+          Same split you’ve seen in tools like
+          <a href="https://sveltiacms.app/en/">Sveltia CMS</a>: the
+          <em>app UI</em> is served from a CDN; each operator deploys
+          <em>their own</em> backend. Here the backend is a Cloudflare Worker
+          (API, Durable Objects, WebSockets, Email Routing, git sync). Nobody
+          shares another operator’s Worker.
+        </p>
+
+        <h2>Highlights</h2>
+        <dl class="highlights">
+          <div>
+            <dt>CDN-hosted GUI</dt>
+            <dd>
+              Console, <code>embed.js</code>, and docs load from this site.
+              Always the current UI; no bundling the admin SPA into every
+              marketing site. Agents open the console from your operator site
+              after sign-in — see <a href="../docs/auth.html">Auth</a>.
+            </dd>
+          </div>
+          <div>
+            <dt>Your Worker for the API</dt>
+            <dd>
+              Chat sockets, intake, presence, email, and encrypted
+              <code>crm-data/</code> commits run on <em>your</em> Cloudflare
+              account.
+            </dd>
+          </div>
+          <div>
+            <dt>Git-based records</dt>
+            <dd>
+              Contacts, tickets, Documents library, macros, branding, and
+              visitors live as encrypted blobs in your Pages/git repo. Reviews
+              stay public JSON you can ship with the site.
+            </dd>
+          </div>
+          <div>
+            <dt>Documents &amp; e-sign</dt>
+            <dd>
+              Encrypted file library with folders; place PDF fields and send
+              share links. Signed copies attach to tickets; save into Documents
+              to keep them after a ticket is deleted. See
+              <a href="../docs/documents.html">Documents &amp; e-sign</a>.
+            </dd>
+          </div>
+          <div>
+            <dt>Drop-in embeds</dt>
+            <dd>
+              One script tag on a client site: <code>src</code> → this CDN,
+              <code>data-crm</code> → your Worker,
+              <code>data-site</code> → the hub site key.
+            </dd>
+          </div>
+          <div>
+            <dt>Contacts CSV</dt>
+            <dd>
+              Import and export contacts with simple Email / Phone columns
+              (compatible with Google Contacts and Outlook CSV).
+            </dd>
+          </div>
+          <div>
+            <dt>Not a multi-tenant SaaS</dt>
+            <dd>
+              You are the operator. Client sites talk to your Worker only. Data
+              stays under your Cloudflare + GitHub (or equivalent) setup.
+            </dd>
+          </div>
+          <div>
+            <dt>Built for static workflows</dt>
+            <dd>
+              Aimed at freelancers and small shops already using Pages, git CMS,
+              and free-tier hosting — the missing chat/CRM piece in that stack.
+            </dd>
+          </div>
+        </dl>
+
+        <h2>What it is not</h2>
+        <ul>
+          <li>
+            Not a hosted chat product you log into on someone else’s domain and
+            forget about infrastructure.
+          </li>
+          <li>
+            Not a replacement for a full enterprise helpdesk (Zendesk-class
+            SLAs, phone, huge agent fleets).
+          </li>
+          <li>
+            Not “Ackvyn’s shared Worker for the internet.” Public docs never
+            point traffic at a personal Worker URL.
+          </li>
+        </ul>
+
+        <h2>Who it’s for</h2>
+        <p>
+          Developers and agencies who can deploy a Worker once, then hand
+          clients a floating chat widget and keep tickets/contacts in their own
+          git store. Editors and owners use the console from the operator site;
+          they don’t need to touch Wrangler.
+        </p>
+
+        <p class="actions doc-actions">
+          <a class="btn primary" href="why.html">Why it exists</a>
+          <a class="btn" href="../docs/getting-started.html">Get started</a>
+          <a class="btn ghost" href="worker.html">Deploy a Worker</a>
+        </p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="what-is.html">What is</a>
+      <a href="why.html">Why</a>
+      <a href="worker.html">Worker</a>
+      <a href="../docs/">Docs</a>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Email routing · Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="Cloudflare Email Routing into Ackvyn CRM — root vs subdomain MX, Proton coexistence, and free-tier mailto CC vs paid outbound."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../site/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="../site/">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="../site/what-is.html">What is</a>
+        <a href="../site/why.html">Why</a>
+        <a href="../site/worker.html">Worker</a>
+        <a href="./" aria-current="page">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-sidebar" aria-label="Documentation">
+        <p class="docs-sidebar-label">Docs</p>
+        <nav>
+          <a href="./">Overview</a>
+          <a href="getting-started.html">Getting started</a>
+          <a href="worker-setup.html">Worker setup</a>
+          <a href="free-tier.html">Free tier &amp; usage</a>
+          <a href="auth.html">Auth &amp; OAuth</a>
+          <a href="email-routing.html" aria-current="page">Email routing</a>
+          <a href="embeds.html">Embeds</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="documents.html">Documents &amp; e-sign</a>
+          <a href="config.html">Config</a>
+        </nav>
+      </aside>
+      <article class="docs-content doc">
+        <h1>Cloudflare Email Routing → Worker</h1>
+        <p>
+          Inbound mail becomes tickets / notes when
+          <a
+            href="https://developers.cloudflare.com/email-routing/"
+            >Cloudflare Email Routing</a
+          >
+          delivers messages to <em>your</em> CRM Worker.
+        </p>
+
+        <h2>Outbound on free accounts (default)</h2>
+        <p>
+          The CRM Worker
+          <strong>does not send mail</strong> unless you turn that on. Default
+          keeps you on Cloudflare’s free Email Routing path (receive → Worker)
+          without needing a paid sending product.
+        </p>
+        <p>
+          Agents reply from their normal client (mailto / Proton / Gmail /
+          whatever). The console builds a message that
+          <strong>CC or BCC’s your CRM inbound address</strong> (Settings →
+          Sites → mailto copy mode). When that copy hits Email Routing → Worker,
+          the thread is appended to the ticket — including agent-outbound notes
+          when the sender’s <code>From</code> is on the site
+          <strong>agent email allowlist</strong>.
+        </p>
+        <aside class="callout">
+          <p>
+            Free-tier shape: receive on the Worker, send from the agent’s own
+            mailbox, CC/BCC the CRM address so the ticket stays complete. See
+            also <a href="free-tier.html">Free tier &amp; usage</a>.
+          </p>
+        </aside>
+
+        <h2>Optional: send from the Worker (paid Email Sending)</h2>
+        <p>
+          The Worker template includes a
+          <code>[[send_email]]</code> binding (<code>EMAIL</code>). The Worker
+          <em>cannot</em> detect whether your Cloudflare account has
+          <a
+            href="https://developers.cloudflare.com/email-service/get-started/send-emails/"
+            >Email Sending</a
+          >
+          enabled — that is a dashboard / plan setting on your account (Workers
+          paid). In CRM → Settings → Sites, leave
+          <strong>Send email from Worker</strong> off until you have:
+        </p>
+        <ol>
+          <li>Workers paid plan with Email Sending enabled</li>
+          <li>Sender domain verified for that mailbox</li>
+          <li>
+            <code>[[send_email]] name = "EMAIL"</code> deployed on your CRM
+            Worker
+          </li>
+          <li>CRM inbound mailbox set (used as <code>From</code>)</li>
+        </ol>
+        <p>
+          Then flip the toggle on. <strong>Email customer</strong> opens an
+          in-console composer and sends through the Worker; the ticket gets an
+          agent-outbound note without needing CC. Mailto remains the path when
+          the toggle is off.
+        </p>
+
+        <h2>Root domain vs subdomain</h2>
+        <p>
+          <strong>Ideal (Cloudflare’s happy path):</strong> Email Routing owns
+          the <em>root</em> (apex) of the zone — MX/TXT as Cloudflare documents —
+          and you create addresses that Send to a Worker. If you can put your
+          day-to-day mail aliases on a subdomain instead (or move the alias app /
+          password-manager “catch-all” off the apex), give Cloudflare the root
+          and the dashboard will show Email Routing as fully enabled.
+        </p>
+        <p>
+          <strong>Common reality:</strong> the apex already points at another
+          host (Proton, Google, Microsoft, …).
+          <strong>Do not</strong> replace those root MX records with Cloudflare
+          or you will break that mailbox.
+        </p>
+        <p>
+          In that case, use a <strong>subdomain</strong> only for CRM intake,
+          e.g. <code>crm.example.com</code> → addresses like
+          <code>info@crm.example.com</code> → Send to your CRM Worker.
+        </p>
+        <p>
+          Cloudflare’s UI may still say Email Routing is disabled or
+          “not configured” for the zone when the <em>root</em> MX is not theirs.
+          That warning is about apex ownership — it is
+          <strong>not</strong> a hard block on subdomain routing. If the
+          subdomain has the Email Routing MX/TXT records Cloudflare asks for,
+          mail to those subdomain addresses still reaches a Worker. (Operators
+          have run Proton on the apex and CRM on a subdomain this way
+          successfully.)
+        </p>
+        <aside class="callout">
+          <p>
+            <strong>Cleaner long-term:</strong> move personal/alias mail off the
+            apex onto a subdomain (or another domain), then let Cloudflare Email
+            Routing manage the root. Until you do that, subdomain → Worker is a
+            valid, working setup — trust the DNS on the subdomain more than the
+            scary “disabled” banner for the apex.
+          </p>
+        </aside>
+
+        <h2>Setup checklist</h2>
+        <ol>
+          <li>
+            Cloudflare dashboard → <strong>Email</strong> →
+            <strong>Email Routing</strong> for the zone.
+          </li>
+          <li>
+            For subdomain intake: add the MX / TXT records Cloudflare shows for
+            that hostname (keep apex MX on Proton/etc. unchanged).
+          </li>
+          <li>
+            Create an address, e.g. <code>info@crm.example.com</code>, action
+            <strong>Send to a Worker</strong> → select your CRM Worker.
+          </li>
+          <li>
+            In Worker vars / settings, map that address to a site key (alias list
+            or default inbound site).
+          </li>
+          <li>
+            In CRM Settings → Sites, set the inbound mailbox to the same address
+            so “Email customer” CC/BCC threads replies back into tickets.
+          </li>
+          <li>
+            Add every agent’s From address to the
+            <strong>agent email allowlist</strong> on that site. Inbound mail
+            with an agent-outbound ticket marker is only credited as an agent
+            note when <code>From</code> matches the list (customer mail is never
+            blocked). Empty allowlist = never treat inbound as agent-outbound.
+          </li>
+        </ol>
+
+        <h2>Optional vanity on apex</h2>
+        <p>
+          Keep customers writing <code>info@example.com</code> on your existing
+          host, and forward that address →
+          <code>info@crm.example.com</code> (Cloudflare → Worker). The short
+          address stays on Proton (or similar); the CRM still sees the copy.
+        </p>
+
+        <h2>Docs</h2>
+        <ul>
+          <li>
+            <a
+              href="https://developers.cloudflare.com/email-routing/email-workers/"
+              >Cloudflare Email Workers</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://developers.cloudflare.com/email-routing/get-started/"
+              >Email Routing get started</a
+            >
+          </li>
+          <li>
+            <a href="free-tier.html">Free tier &amp; Worker usage</a>
+          </li>
+        </ul>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="../site/what-is.html">What is</a>
+      <a href="../site/why.html">Why</a>
+      <a href="../site/worker.html">Worker</a>
+      <a href="./">Docs</a>
+    </footer>
+  </body>
+</html>

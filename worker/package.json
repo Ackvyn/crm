@@ -1,0 +1,56 @@
+{
+  "name": "ackvyn-crm-worker",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "Ackvyn CRM API Worker — Durable Objects, WebSockets, email, git sync. Deploy from https://github.com/Ackvyn/crm/tree/main/worker",
+  "cloudflare": {
+    "label": "Ackvyn CRM",
+    "products": [
+      "Workers",
+      "Durable Objects"
+    ],
+    "categories": [
+      "storage"
+    ],
+    "bindings": {
+      "CRM": {
+        "description": "SQLite Durable Object for live chat, presence, and per-site CRM state (provisioned automatically)."
+      },
+      "ASSETS": {
+        "description": "Optional static embeds on the Worker hostname (`embed.js`). Console/GUI still load from the CDN."
+      },
+      "GITHUB_TOKEN": {
+        "description": "Leave blank until you paste **your own** GitHub PAT (Contents access to `CRM_GIT_REPO`). Never reuse a sample token — create one under GitHub → Settings → Developer settings → Personal access tokens."
+      },
+      "CRM_DATA_PASSPHRASE": {
+        "description": "Leave blank and paste a **unique long random string** (not a short login password). Same value on this Worker secret and in the CRM console. Generate one at [crm.ackvyn.org/worker.html#passphrase](https://crm.ackvyn.org/worker.html#passphrase) or `openssl rand -base64 32`."
+      },
+      "AUTH_WORKER_URL": {
+        "description": "Base URL of **your** auth Worker (GitHub OAuth), e.g. `https://your-auth.workers.dev`. Required for console admin APIs."
+      },
+      "ALLOWED_SITE_ORIGINS": {
+        "description": "Comma-separated HTTPS origins allowed for CORS (your operator site + client sites)."
+      },
+      "CRM_GIT_REPO": {
+        "description": "`owner/repo` where encrypted CRM files are stored (same repo your Pages/site uses is fine)."
+      },
+      "CRM_INBOUND_EMAIL_SITE": {
+        "description": "Default site key when inbound Email Routing has no alias map match."
+      }
+    }
+  },
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "tail": "wrangler tail",
+    "check": "wrangler deploy --dry-run"
+  },
+  "devDependencies": {
+    "wrangler": "4.112.0"
+  },
+  "dependencies": {
+    "@pushforge/builder": "^2.0.5"
+  }
+}

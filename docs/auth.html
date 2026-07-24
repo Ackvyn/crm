@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Auth &amp; GitHub OAuth · Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="Gate the Ackvyn CRM console with a GitHub OAuth auth Worker. Point AUTH_WORKER_URL at your OAuth Worker — often the same one you use for a git-based CMS."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../site/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="../site/">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="../site/what-is.html">What is</a>
+        <a href="../site/why.html">Why</a>
+        <a href="../site/worker.html">Worker</a>
+        <a href="./" aria-current="page">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="docs-shell">
+      <aside class="docs-sidebar" aria-label="Documentation">
+        <p class="docs-sidebar-label">Docs</p>
+        <nav>
+          <a href="./">Overview</a>
+          <a href="getting-started.html">Getting started</a>
+          <a href="worker-setup.html">Worker setup</a>
+          <a href="free-tier.html">Free tier &amp; usage</a>
+          <a href="auth.html" aria-current="page">Auth &amp; OAuth</a>
+          <a href="email-routing.html">Email routing</a>
+          <a href="embeds.html">Embeds</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="documents.html">Documents &amp; e-sign</a>
+          <a href="config.html">Config</a>
+        </nav>
+      </aside>
+
+      <article class="docs-content doc">
+        <h1>Auth &amp; GitHub OAuth</h1>
+        <p>
+          The CRM <strong>console</strong> is not a public app on this marketing
+          site. Agents open it from a private page on
+          <em>their</em> site (iframe or link) after signing in with GitHub —
+          the same pattern many people already use for a CDN-served git CMS
+          such as <a href="https://sveltiacms.app/en/">Sveltia CMS</a>.
+        </p>
+
+        <h2>CRM Worker vs auth Worker</h2>
+        <p>
+          The CRM Worker you deploy from this project is <strong>API only</strong>.
+          It does not implement GitHub OAuth itself. It verifies sessions by
+          calling an auth Worker you configure with
+          <code>AUTH_WORKER_URL</code>.
+        </p>
+        <ol>
+          <li>
+            <strong>Auth Worker</strong> — hosts the GitHub OAuth app,
+            allowlisted logins, short-lived sessions (and, when used with CRM,
+            optional GitHub token + data passphrase for encrypted
+            <code>crm-data/</code>). If you already run an auth Worker for a
+            git-based CMS, you can usually reuse that same Worker.
+          </li>
+          <li>
+            <strong>CRM Worker</strong> — chat, tickets, email, git sync. Set
+            <code>AUTH_WORKER_URL</code> to your auth Worker so session checks
+            stay consistent.
+          </li>
+        </ol>
+
+        <h2>GitHub OAuth app</h2>
+        <ol>
+          <li>
+            Create a GitHub OAuth App (Developer settings). Homepage URL = your
+            site; callback URL = your auth Worker’s OAuth callback path.
+          </li>
+          <li>
+            Store client id/secret on the auth Worker (secrets). Allowlist agent
+            GitHub usernames.
+          </li>
+          <li>
+            CRM console sign-in uses one authorize that can return a session
+            plus a scoped token for git writes to <code>crm-data/</code>.
+          </li>
+        </ol>
+
+        <h2>Where the console lives</h2>
+        <ul>
+          <li>
+            GUI script: this CDN (<code>https://crm.ackvyn.org/cdn/ackvyn-crm-console.js</code>)
+            — same idea as Sveltia’s <code>sveltia-cms.js</code>. Not linked in
+            the public top nav.
+          </li>
+          <li>
+            Operator UX: host a thin HTML page on <em>your</em> site (e.g.
+            <code>/crm/index.html</code>) that loads the script. Pass your
+            Workers as attributes:
+            <pre><code>&lt;script
+  src="https://crm.ackvyn.org/cdn/ackvyn-crm-console.js"
+  data-api="https://YOUR-CRM.workers.dev"
+  data-auth="https://YOUR-AUTH.workers.dev"
+  data-site="yoursite"
+&gt;&lt;/script&gt;</code></pre>
+            The browser origin is your site, so CORS / OAuth allowlists only
+            need your domain — not this CDN.
+          </li>
+          <li>
+            Public chat widgets still use <code>embed.js</code> +
+            <code>data-crm</code> — no OAuth required for visitors.
+          </li>
+        </ul>
+
+        <h2>CRM Worker config</h2>
+        <pre><code># wrangler.toml [vars]
+AUTH_WORKER_URL = "https://YOUR-AUTH.workers.dev"
+
+# Secrets on the CRM Worker
+# npx wrangler secret put GITHUB_TOKEN
+# npx wrangler secret put CRM_DATA_PASSPHRASE</code></pre>
+        <p class="muted">
+          See also <a href="../site/worker.html">Worker</a> overview and
+          <a href="worker-setup.html">Worker setup</a>.
+        </p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="../site/what-is.html">What is</a>
+      <a href="../site/why.html">Why</a>
+      <a href="../site/worker.html">Worker</a>
+      <a href="./">Docs</a>
+    </footer>
+  </body>
+</html>
