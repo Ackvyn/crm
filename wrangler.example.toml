@@ -1,0 +1,52 @@
+# Maintainer copy — NOT the Deploy-to-Cloudflare template.
+#
+# Operators use the Deploy button / `worker/` folder:
+#   https://github.com/Ackvyn/crm/tree/main/worker
+#   (committed worker/wrangler.toml — self-contained)
+#
+# Ackvyn maintainers: copy this file to gitignored ./wrangler.toml and set
+# account_id + real vars. Assets path below expects:
+#   npm run prepare:worker-assets
+# Or deploy from worker/ after ./scripts/sync-worker-template.sh
+
+name = "ackvyn-crm"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+# account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+
+# Embed static assets only (API + WS + email stay on the Worker).
+# Public CDN / docs example: https://crm.ackvyn.org
+[assets]
+directory = "./dist/worker-static"
+binding = "ASSETS"
+run_worker_first = true
+
+[[durable_objects.bindings]]
+name = "CRM"
+class_name = "CrmSite"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["CrmSite"]
+
+# NEW CODE - TESTING: Cloudflare Email Sending (Workers paid) — optional CRM toggle
+[[send_email]]
+name = "EMAIL"
+
+[vars]
+ALLOWED_SITE_ORIGINS = "https://example.com,http://localhost:5173"
+ARCHIVE_AFTER_DAYS = "90"
+CRM_GIT_REPO = "YOUR_ORG/YOUR_REPO"
+CRM_GIT_BRANCH = "main"
+CRM_GIT_PATH_PREFIX = "crm-data"
+CRM_INBOUND_EMAIL_SITE = "your-site-key"
+AUTH_WORKER_URL = "https://your-auth.workers.dev"
+# CRM_EMAIL_ALIASES = "info@crm.example.com:your-site-key"
+# CRM_EMAIL_FORWARD_TO = ""
+
+# Secrets (set via wrangler — do not commit):
+#   npx wrangler secret put GITHUB_TOKEN
+#   npx wrangler secret put CRM_DATA_PASSPHRASE
+
+[triggers]
+crons = ["0 6,18 * * *"]

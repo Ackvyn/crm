@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /console
+Disallow: /console/
+Disallow: /cdn/
+Disallow: /site/demo.html
+Disallow: /wiki/
+Disallow: /worker/
+Disallow: /open-redact/
+
+Sitemap: https://crm.ackvyn.org/sitemap.xml
+# Marketing pages live under /site/; docs under /docs/; scripts under /cdn/

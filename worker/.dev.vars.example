@@ -1,0 +1,12 @@
+# Secrets for local `wrangler dev` — copy to `.dev.vars` (never commit that file).
+# Deploy to Cloudflare: leave these empty in the UI and paste YOUR values.
+# Do not put real tokens or shared sample passphrases here (misleading on clone).
+
+# GitHub PAT with Contents access to CRM_GIT_REPO (Worker writes encrypted blobs).
+GITHUB_TOKEN=
+
+# Long random secret for encrypting crm-data/ — NOT a short login password.
+# Same value on the Worker secret and in the CRM console. Generate one at:
+#   https://crm.ackvyn.org/worker.html#passphrase
+# or: openssl rand -base64 32
+CRM_DATA_PASSPHRASE=

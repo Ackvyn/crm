@@ -1,0 +1,44 @@
+name: Feature request
+description: Suggest an improvement for operators or visitors
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the **problem** and who it helps. Solutions are welcome after that.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What is hard or missing today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed idea
+      description: How might Ackvyn CRM help? Optional sketches or UX notes
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Console (CRM UI)
+        - Worker / API
+        - Chat embed
+        - Documents / e-sign
+        - Contacts / tickets
+        - Email
+        - Docs
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false

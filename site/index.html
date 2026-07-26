@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ackvyn CRM</title>
+    <meta
+      name="description"
+      content="Portable CRM for static sites: live chat, tickets, contacts, documents, PDF e-sign share links, email, analytics, and reviews on your Worker and git store."
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://crm.ackvyn.org/site/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Ackvyn CRM" />
+    <meta property="og:title" content="Ackvyn CRM" />
+    <meta
+      property="og:description"
+      content="Live chat, tickets, contacts, documents, and PDF e-sign for static sites. CDN console, your Cloudflare Worker, encrypted git records."
+    />
+    <meta property="og:url" content="https://crm.ackvyn.org/site/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ackvyn CRM" />
+    <meta
+      name="twitter:description"
+      content="Live chat, tickets, contacts, documents, and PDF e-sign for static sites."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Ackvyn CRM",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "url": "https://crm.ackvyn.org/site/",
+        "description": "Portable CRM for static sites: live chat, tickets, contacts, documents, PDF e-sign share links, email, analytics, and reviews.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Ackvyn",
+          "url": "https://webstudio.ackvyn.org/"
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="./">Ackvyn <span>CRM</span></a>
+      <nav>
+        <a href="what-is.html">What is</a>
+        <a href="why.html">Why</a>
+        <a href="worker.html">Worker</a>
+        <a href="../docs/">Docs</a>
+        <a href="https://github.com/Ackvyn/crm">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1 class="brand-hero">Ackvyn <span>CRM</span></h1>
+        <p class="hero-line">From first message to signed paperwork.</p>
+        <p class="lede">
+          Live chat, tickets, contacts, documents, and PDF e-sign for the free
+          Pages + git CMS world. The console and embeds come from this CDN; the
+          API runs on a Cloudflare Worker you control.
+        </p>
+        <p class="actions">
+          <a class="btn primary" href="what-is.html">What is Ackvyn CRM?</a>
+          <a class="btn" href="worker.html">Deploy your Worker</a>
+          <a class="btn ghost" href="why.html">Why it exists</a>
+        </p>
+        <!-- OLD CODE - KEEP UNTIL CONFIRMED WORKING: .deploy-row with Deploy to Cloudflare button removed from homepage; button remains on worker.html / docs/worker-setup.html -->
+      </section>
+
+      <section class="pillars" aria-label="Highlights">
+        <div>
+          <h2>CDN GUI</h2>
+          <p>
+            Console, chat widget, and docs — always current, no SPA copy on every
+            client site.
+          </p>
+        </div>
+        <div>
+          <h2>Your Worker</h2>
+          <!-- OLD CODE - KEEP UNTIL CONFIRMED WORKING
+          <p>
+            Sockets, intake, email, and git sync on your Cloudflare account —
+            not a shared black box.
+          </p>
+          -->
+          <!-- NEW CODE - TESTING -->
+          <p>
+            Chat, email, and visitor intake on your Cloudflare Free Worker —
+            console CRUD stays on GitHub where it can, like Sveltia.
+          </p>
+          <!-- END NEW CODE -->
+        </div>
+        <div>
+          <h2>Git records</h2>
+          <p>
+            Encrypted contacts, tickets, and Documents in
+            <code>crm-data/</code>; public reviews JSON you can ship with the
+            site.
+          </p>
+        </div>
+        <div>
+          <h2>Drop-in embeds</h2>
+          <p>
+            One script: <code>src</code> from this CDN,
+            <code>data-crm</code> to your Worker.
+          </p>
+        </div>
+      </section>
+
+      <section class="feature-suite" aria-labelledby="feature-suite-title">
+        <div class="feature-suite-intro">
+          <p class="eyebrow">One customer workspace</p>
+          <h2 id="feature-suite-title">The useful parts of a CRM, connected</h2>
+          <p>
+            Conversations become tickets, tickets stay tied to contacts, and
+            documents move through the same record instead of disappearing
+            into another subscription.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <h3>Live chat &amp; presence</h3>
+            <p>
+              A drop-in website messenger with WebSocket chat, visitor
+              presence, notifications, transcripts, and agent handoff.
+            </p>
+          </article>
+          <article>
+            <h3>Tickets &amp; intake</h3>
+            <p>
+              Turn chats, forms, and inbound email into an activity timeline
+              with statuses, notes, attachments, macros, and assignment.
+            </p>
+          </article>
+          <article>
+            <h3>Contacts</h3>
+            <p>
+              Keep people, companies, ticket history, signed documents, and
+              reusable details together. Import or export CSV when needed.
+            </p>
+          </article>
+          <article>
+            <h3>Document library</h3>
+            <p>
+              Store encrypted files in folders, prepare reusable PDF
+              templates, retain signed copies, and link documents back to
+              contacts and tickets.
+            </p>
+          </article>
+          <article>
+            <h3>PDF e-sign share links</h3>
+            <p>
+              Place signature, initials, date, number, text, checkbox, and
+              dropdown fields; send a revocable link; attach the completed PDF
+              and audit trail to the ticket.
+            </p>
+          </article>
+          <article>
+            <h3>Cryptographic proof</h3>
+            <p>
+              Signed PDFs include visual ink, a per-site self-signed PKCS#7
+              integrity seal, and an independently trusted DigiCert RFC 3161
+              completion timestamp.
+            </p>
+          </article>
+          <article>
+            <h3>Email &amp; reusable workflows</h3>
+            <p>
+              Route inbound mail through your Worker, send from ticket context,
+              and reuse response macros without moving customer history.
+            </p>
+          </article>
+          <article>
+            <h3>Analytics &amp; reviews</h3>
+            <p>
+              Connect GA4 reporting, sync Google reviews to public JSON, and
+              keep marketing embeds beside the customer workflow.
+            </p>
+          </article>
+        </div>
+        <p class="feature-suite-link">
+          <a href="what-is.html">Explore the full feature set</a>
+          <span aria-hidden="true">·</span>
+          <a href="../docs/documents.html">How document signing works</a>
+        </p>
+      </section>
+
+      <section class="console-demo" aria-label="Console demo">
+        <div class="console-demo-intro">
+          <h2>The real console</h2>
+          <p>
+            Same Messenger, Tickets, and Contacts panels as the live console —
+            driven by a short scripted scenario. Use the timeline under the
+            console to skip ahead. View-only; no Worker or sign-in.
+          </p>
+        </div>
+        <div class="console-demo-stage">
+          <div id="crm-demo-root" class="console-demo-host"></div>
+        </div>
+      </section>
+      <!-- OLD CODE - KEEP UNTIL CONFIRMED WORKING
+      <script src="../cdn/ackvyn-crm-showcase.js" defer></script>
+      <script src="../cdn/ackvyn-crm-showcase.js?v=20260726phone1" defer></script>
+      -->
+      <!-- NEW CODE - TESTING: demo is desktop-only; phones never download it -->
+      <script>
+        if (window.matchMedia('(min-width: 640px)').matches) {
+          var demoScript = document.createElement('script')
+          demoScript.src = '../cdn/ackvyn-crm-showcase.js?v=20260726phone1'
+          demoScript.defer = true
+          document.currentScript.parentNode.insertBefore(
+            demoScript,
+            document.currentScript,
+          )
+        }
+      </script>
+
+      <section class="split" aria-label="How it splits">
+        <div>
+          <h2>This CDN</h2>
+          <p>
+            <code>embed.js</code>, product pages, docs, and the console GUI
+            assets. Agents open the console from their operator site (iframe or
+            link after sign-in) — not as a public marketing link.
+          </p>
+        </div>
+        <div>
+          <h2>Your Worker</h2>
+          <!-- OLD CODE - KEEP UNTIL CONFIRMED WORKING
+          <p>
+            Durable Objects, WebSockets, form intake, Email Routing, encrypted
+            commits — on your account.
+          </p>
+          -->
+          <!-- NEW CODE - TESTING -->
+          <p>
+            Durable Objects, WebSockets, form intake, Email Routing — on your
+            account. Agent ticket/contact edits prefer GitHub from the browser
+            (<a href="../docs/free-tier.html">usage notes</a>).
+          </p>
+          <!-- END NEW CODE -->
+        </div>
+        <div>
+          <h2>Client sites</h2>
+          <p>
+            Marketing sites load the widget from here and talk only to
+            <em>your</em> Worker.
+          </p>
+        </div>
+      </section>
+
+      <section class="snippet-block">
+        <h2>Embed on a marketing site</h2>
+        <pre><code>&lt;script
+  src="https://crm.ackvyn.org/cdn/embed.js"
+  data-site="your-site-key"
+  data-crm="https://YOUR-SUBDOMAIN.workers.dev"
+  data-mode="float"
+  async
+&gt;&lt;/script&gt;</code></pre>
+        <p class="muted">
+          Never point <code>data-crm</code> at someone else’s Worker. Each
+          operator deploys their own.
+        </p>
+      </section>
+
+      <section class="home-links">
+        <h2>Learn more</h2>
+        <ul>
+          <li>
+            <a href="what-is.html">What is Ackvyn CRM?</a> — product definition
+            and highlights
+          </li>
+          <li>
+            <a href="why.html">Why</a> — static workflows, Sveltia-shaped
+            thinking, free Cloudflare budgets, and how this sits next to Tawk
+          </li>
+          <li>
+            <a href="worker.html">Worker</a> — deploy your API Worker
+          </li>
+          <li>
+            <a href="../docs/">Docs</a> — setup guides (Worker, free tier, auth,
+            email, embeds, documents, e-sign verification, reviews, and config)
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ackvyn CRM</span>
+      <a href="what-is.html">What is</a>
+      <a href="why.html">Why</a>
+      <a href="worker.html">Worker</a>
+      <a href="../docs/">Docs</a>
+    </footer>
+  </body>
+</html>
